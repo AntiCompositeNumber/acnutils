@@ -312,7 +312,7 @@ class Throttle:
     def __init__(self, delay: float) -> None:
         """:param delay: Seconds between `throttle` calls"""
         self.delay = delay
-        self.last_edit = 0
+        self.last_edit = 0.0
 
     def throttle(self) -> None:
         now = time.monotonic()
