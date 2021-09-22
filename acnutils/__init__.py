@@ -28,7 +28,7 @@ import toolforge
 
 from typing import Callable, Any, Dict
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 logger = logging.getLogger(__name__)
 
@@ -125,7 +125,9 @@ def logger_config(
         }
         conf["root"].setdefault("handlers", []).append("file")
 
-    if os.environ.get("LOG_SMTP") and tool and on_toolforge():
+    if os.environ.get("LOG_SMTP") and on_toolforge():
+        if not tool and os.environ.get("HOME"):
+            tool = os.environ["HOME"].rpartition("/")[2]
         conf["handlers"]["smtp"] = {
             "class": "logging.handlers.SMTPHandler",
             "mailhost": "mail.tools.wmflabs.org",

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "acnutils"
-version = "0.1.0"
+version = "0.2.0"
 description = "Various utilities used in AntiCompositeNumber's bots"
 authors = ["AntiCompositeNumber <anticompositenumber+pypi@gmail.com>"]
 license = "Apache-2.0"
