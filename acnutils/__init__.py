@@ -151,7 +151,7 @@ def get_log_location(filename: str) -> str:
     """
     if filename.startswith("/"):
         return filename
-    if on_toolforge() and os.environ.get("HOME"):
+    elif on_toolforge() and os.environ.get("HOME"):
         logdir = os.path.join(os.environ["HOME"], "logs")
         try:
             os.mkdir(logdir)
@@ -202,7 +202,7 @@ def check_runpage(
         titleparts.append("Run")
         title = "/".join(titleparts)
 
-    page = pywikibot.Page(site, f"User:AntiCompositeBot/{task}/Run")
+    page = pywikibot.Page(site, title)
     if not page.text.endswith("True"):
         raise RunpageError(f"Runpage {page.title(as_link=True)} is disabled")
 
@@ -236,34 +236,31 @@ def save_page(
     """
     logger.info(f"Saving to {page.title()}")
     if not text:
+        if no_change_ok:
+            return
         raise PageNotSaved(
             page, message="New page text is blank, page %s was not saved"
         )
 
+    try:
+        old_text = page.get(force=True)
+    except pywikibot.exceptions.NoPageError as err:
+        logger.exception(err)
+        if new_ok:
+            old_text = ""
+        else:
+            raise
+
     if mode == "replace":
-        text = text
+        pass
     elif mode == "append":
-        try:
-            text = page.get(force=True) + text
-        except pywikibot.exceptions.NoPageError as err:
-            logger.exception(err)
-            if new_ok:
-                text = text
-            else:
-                raise
+        text = old_text + text
     elif mode == "prepend":
-        try:
-            text = text + page.get(force=True)
-        except pywikibot.exceptions.NoPageError as err:
-            logger.exception(err)
-            if new_ok:
-                text = text
-            else:
-                raise
+        text = text + old_text
     else:
         raise ValueError("mode must be 'replace', 'append', or 'prepend', not {mode}")
 
-    if page.get(force=True) == text:
+    if old_text == text:
         if not no_change_ok:
             raise PageNotSaved(
                 page, message="Page text did not change, page %s was not saved"
@@ -289,7 +286,7 @@ def retry(function: Callable, retries: int, *args, **kwargs) -> Any:
     All other args are passed to the called function.
     """
     if retries < 1:
-        raise IndexError("Retry called with retries < 1")
+        raise ValueError("Retry called with retries < 1")
     for i in range(retries):
         try:
             out = function(*args, **kwargs)
