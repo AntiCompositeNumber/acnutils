@@ -20,6 +20,7 @@
 import pywikibot  # type: ignore
 import logging
 import logging.handlers
+import logging.config
 import time
 import os
 import json
@@ -28,7 +29,7 @@ import toolforge
 
 from typing import Callable, Any, Dict
 
-__version__ = "0.2.1"
+__version__ = "0.3.0"
 
 logger = logging.getLogger(__name__)
 
@@ -140,6 +141,17 @@ def logger_config(
         conf["root"].setdefault("handlers", []).append("smtp")
 
     return conf
+
+
+def getInitLogger(module: str, **kwargs) -> logging.Logger:
+    """Configure and initialize logging, then return a Logger for ``module``.
+
+    Parameters are passed to `logger_config`.
+    :param module: Name of module to be logged
+    """
+    pywikibot.bot.init_handlers()
+    logging.config.dictConfig(logger_config(module, **kwargs))
+    return logging.getLogger(module)
 
 
 def get_log_location(filename: str) -> str:
