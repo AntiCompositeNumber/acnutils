@@ -337,7 +337,7 @@ def get_replag(db: str, cluster: str = "web") -> datetime.timedelta:
             raise ValueError
 
 
-def load_config(namespace: str) -> dict:
+def load_config(namespace: str, filepath: str) -> dict:
     """Load JSON configuration data stored in the parent directory.
 
     Load order:
@@ -347,8 +347,14 @@ def load_config(namespace: str) -> dict:
     4. ``namespace`` in config.json
 
     Configuation data loaded last takes precedence.
+
+    :param namespace: Configuration namespace to use
+    :param filepath: Set to ``__file__``
     """
-    conf_dir = os.path.realpath(os.path.dirname(__file__) + "/..")
+    # XXX: Requiring that __file__ be passed every time isn't great. Calling __file__
+    # here doesn't work, because it's now relative to this file in some site_packages
+    # somewhere.
+    conf_dir = os.path.realpath(os.path.dirname(filepath) + "/..")
 
     config = {}
     with open(os.path.join(conf_dir, "default_config.json")) as f:
