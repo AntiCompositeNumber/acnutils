@@ -407,7 +407,7 @@ def test_load_config():
     mock_dirname = mock.Mock(return_value="/foo/bar/baz.py")
     with mock.patch("acnutils.open", mock_open):
         with mock.patch("os.path.dirname", mock_dirname):
-            conf = acnutils.load_config("test")
+            conf = acnutils.load_config("test", __file__)
 
     for i in range(1, 16):
         assert i == conf.pop(str(i))
@@ -426,6 +426,6 @@ def test_load_config_nolocal():
     mock_dirname = mock.Mock(return_value="/foo/bar/baz.py")
     with mock.patch("acnutils.open", mock_open):
         with mock.patch("os.path.dirname", mock_dirname):
-            conf = acnutils.load_config("test")
+            conf = acnutils.load_config("test", __file__)
 
     assert conf["foo"] == "bar"
