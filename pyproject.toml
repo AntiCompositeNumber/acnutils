@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "acnutils"
-version = "0.3.0"
+version = "0.4.0-alpha.0"
 description = "Various utilities used in AntiCompositeNumber's bots"
 authors = ["AntiCompositeNumber <anticompositenumber+pypi@gmail.com>"]
 license = "Apache-2.0"
@@ -22,7 +22,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.7"
 pywikibot = "^6.6.1"
-toolforge = "^5.0.0"
+toolforge = {version="^5.0.0", optional=true}
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.910"
@@ -31,6 +31,9 @@ black = "^21.9b0"
 pytest = "^6.2.5"
 coveralls = "^3.2.0"
 mwparserfromhell = "^0.6.3"
+
+[tool.poetry.extras]
+db = ["toolforge"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

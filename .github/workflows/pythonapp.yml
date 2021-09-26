@@ -16,7 +16,7 @@ jobs:
     - name: Set up Poetry
       uses: snok/install-poetry@v1
     - name: Install dependencies
-      run: poetry install --no-interaction
+      run: poetry install --no-interaction -E db
     - name: Load pywikibot config
       env:
           USER_CONFIG_PY: ${{ secrets.user_config_py }}

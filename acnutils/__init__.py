@@ -24,14 +24,16 @@ import logging.config
 import time
 import os
 import json
-import datetime
-import toolforge
+import importlib.util
 
 from typing import Callable, Any, Dict
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 logger = logging.getLogger(__name__)
+
+if importlib.util.find_spec("toolforge"):
+    from acnutils.db import get_replag  # noqa: F401
 
 
 class RunpageError(Exception):
@@ -332,21 +334,6 @@ class Throttle:
             logger.debug(f"Sleeping for {diff} seconds")
             time.sleep(diff)
         self.last_edit = time.monotonic()
-
-
-def get_replag(db: str, cluster: str = "web") -> datetime.timedelta:
-    """Retrieve the current replecation lag for a Toolforge database.
-
-    :param db: Name of the database, ``_p`` suffix not required.
-    :param cluster: Database cluster to query.
-    """
-    conn = toolforge.connect(db, cluster=cluster)
-    with conn.cursor() as cur:
-        count = cur.execute("SELECT lag FROM heartbeat_p.heartbeat LIMIT 1")
-        if count:
-            return datetime.timedelta(seconds=float(cur.fetchall()[0][0]))
-        else:
-            raise ValueError
 
 
 def load_config(namespace: str, filepath: str) -> dict:

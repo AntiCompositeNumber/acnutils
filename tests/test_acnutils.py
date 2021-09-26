@@ -20,10 +20,8 @@
 import os
 import pywikibot
 import unittest.mock as mock
-from decimal import Decimal
 from io import StringIO
 import json
-import datetime
 import pytest
 import acnutils
 
@@ -323,29 +321,6 @@ def test_throttle():
                 else:
                     mock_sleep.assert_not_called()
                 mock_sleep.reset_mock()
-
-
-def test_get_replag():
-    mock_connect = mock.MagicMock()
-    mock_cur = mock_connect.return_value.cursor.return_value.__enter__.return_value
-    mock_execute = mock.MagicMock(return_value=1)
-    mock_cur.execute = mock_execute
-    mock_cur.fetchall.return_value = ((Decimal("10.0000"),),)
-
-    with mock.patch("toolforge.connect", mock_connect):
-        result = acnutils.get_replag(mock.sentinel.db, cluster=mock.sentinel.cluster)
-    assert result == datetime.timedelta(seconds=10)
-
-
-def test_get_replag_raise():
-    mock_connect = mock.MagicMock()
-    mock_cur = mock_connect.return_value.cursor.return_value.__enter__.return_value
-    mock_execute = mock.MagicMock(return_value=0)
-    mock_cur.execute = mock_execute
-
-    with mock.patch("toolforge.connect", mock_connect):
-        with pytest.raises(ValueError):
-            acnutils.get_replag(mock.sentinel.db, cluster=mock.sentinel.cluster)
 
 
 def test_load_config():
