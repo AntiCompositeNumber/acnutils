@@ -18,7 +18,7 @@ jobs:
     - name: Set up Poetry
       uses: snok/install-poetry@v1
     - name: Install dependencies
-      run: poetry install --no-interaction
+      run: poetry install -E db --no-interaction
     - name: Check version
       run: |
         [ "$(poetry run python -c 'import acnutils; print(acnutils.__version__)')" == "$(poetry version -s)" ]
