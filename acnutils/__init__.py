@@ -28,7 +28,7 @@ import importlib.util
 
 from typing import Callable, Any, Dict
 
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +51,11 @@ class PageNotSaved(Exception):
 
 
 def logger_config(
-    module: str, level: str = "INFO", filename: str = "", tool: str = ""
+    module: str,
+    level: str = "INFO",
+    filename: str = "",
+    tool: str = "",
+    thread: bool = False,
 ) -> Dict:
     """Create a logging configuration dict for logging.config.dictConfig.
 
@@ -68,6 +72,7 @@ def logger_config(
             it is relative to the current working directory
         - ``stderr``: A special value, streams to stderr instead of writing to a file.
     :param tool: Name of the Toolforge tool, used for SMTP logging.
+    :param thread: Include thread name in log entries.
 
     :Environment variables:
     - `LOG_LEVEL`: Overrides the log level set with ``level``
@@ -92,11 +97,16 @@ def logger_config(
     else:
         log_file = f"{module}.log"
 
+    if thread:
+        formatstr = "%(asctime)s %(name)s %(threadName)s %(levelname)s: %(message)s"
+    else:
+        formatstr = "%(asctime)s %(name)s %(levelname)s: %(message)s"
+
     conf: Dict = {
         "version": 1,
         "formatters": {
             "log": {
-                "format": "%(asctime)s %(name)s %(levelname)s: %(message)s",
+                "format": formatstr,
                 "datefmt": "%Y-%m-%d %H:%M:%S",
             }
         },
