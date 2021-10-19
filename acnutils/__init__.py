@@ -28,7 +28,7 @@ import importlib.util
 
 from typing import Callable, Any, Dict
 
-__version__ = "0.5.0"
+__version__ = "0.6.0"
 
 logger = logging.getLogger(__name__)
 
@@ -122,11 +122,10 @@ def logger_config(
         conf["root"].setdefault("handlers", []).append("console")
     elif on_toolforge():
         conf["handlers"]["file"] = {
-            "class": "logging.handlers.TimedRotatingFileHandler",
+            "class": "logging.handlers.RotatingFileHandler",
             "filename": get_log_location(log_file),
-            "when": "D",
-            "interval": 30,
-            "backupCount": 3,
+            "maxBytes": 10 * 1024 ** 2,  # 10 MiB
+            "backupCount": 5,
             "formatter": "log",
         }
         conf["root"].setdefault("handlers", []).append("file")
