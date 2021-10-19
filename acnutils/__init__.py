@@ -120,19 +120,12 @@ def logger_config(
             "formatter": "log",
         }
         conf["root"].setdefault("handlers", []).append("console")
-    elif on_toolforge():
+    else:
         conf["handlers"]["file"] = {
             "class": "logging.handlers.RotatingFileHandler",
             "filename": get_log_location(log_file),
             "maxBytes": 10 * 1024 ** 2,  # 10 MiB
             "backupCount": 5,
-            "formatter": "log",
-        }
-        conf["root"].setdefault("handlers", []).append("file")
-    else:
-        conf["handlers"]["file"] = {
-            "class": "logging.FileHandler",
-            "filename": get_log_location(log_file),
             "formatter": "log",
         }
         conf["root"].setdefault("handlers", []).append("file")
