@@ -124,7 +124,7 @@ def logger_config(
         conf["handlers"]["file"] = {
             "class": "logging.handlers.RotatingFileHandler",
             "filename": get_log_location(log_file),
-            "maxBytes": 10 * 1024 ** 2,  # 10 MiB
+            "maxBytes": 10 * 1024**2,  # 10 MiB
             "backupCount": 5,
             "formatter": "log",
         }
