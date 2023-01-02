@@ -28,7 +28,7 @@ import importlib.util
 
 from typing import Callable, Any, Dict
 
-__version__ = "0.6.1"
+__version__ = "0.6.2"
 
 logger = logging.getLogger(__name__)
 
@@ -235,6 +235,7 @@ def save_page(
     force: bool = False,
     new_ok: bool = False,
     no_change_ok: bool = False,
+    edit_redirect: bool = False,
 ) -> None:
     """Helper for saving a page using Pywikibot.
 
@@ -251,6 +252,7 @@ def save_page(
     :param new_ok: Allow the creation of new pages, default False
     :param no_change_ok: Do not raise `PageNotSaved` if there is no change between
         the current text and the new text.
+    :param edit_redirect: Edit redirect pages instead of raising an exception
     """
     logger.info(f"Saving to {page.title()}")
     if not text:
@@ -261,7 +263,7 @@ def save_page(
         )
 
     try:
-        old_text = page.get(force=True)
+        old_text = page.get(force=True, get_redirect=edit_redirect)
     except pywikibot.exceptions.NoPageError as err:
         logger.exception(err)
         if new_ok:
