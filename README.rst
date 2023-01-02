@@ -1,6 +1,6 @@
 acnutils
 ========
-.. image:: https://img.shields.io/github/workflow/status/AntiCompositeNumber/AntiCompositeBot/Python%20application
+.. image:: https://img.shields.io/github/workflow/status/AntiCompositeNumber/AntiCompositeBot/pythonapp.yml?branch=master
     :alt: GitHub Workflow Status
     :target: https://github.com/AntiCompositeNumber/acnutils/actions
 .. image:: https://coveralls.io/repos/github/AntiCompositeNumber/acnutils/badge.svg?branch=master
