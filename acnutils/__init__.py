@@ -14,7 +14,7 @@ import importlib.util
 
 from typing import Callable, Any, Dict
 
-__version__ = "0.6.2"
+__version__ = "0.6.3"
 
 logger = logging.getLogger(__name__)
 
