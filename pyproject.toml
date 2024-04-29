@@ -28,7 +28,7 @@ toolforge = {version=">=5,<7", optional=true}
 mypy = "^1.0"
 flake8 = "^5.0.4"
 black = "^24.3"
-pytest = "^7.0.0"
+pytest = "^8.2.0"
 coveralls = "^3.2.0"
 mwparserfromhell = "^0.6.3"
 
